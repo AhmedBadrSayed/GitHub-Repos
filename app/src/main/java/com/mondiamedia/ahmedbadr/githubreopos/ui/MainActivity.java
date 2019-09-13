@@ -1,4 +1,4 @@
-package com.mondiamedia.ahmedbadr.githubreopos;
+package com.mondiamedia.ahmedbadr.githubreopos.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.mondiamedia.ahmedbadr.githubreopos.R;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -18,9 +20,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
     }
 
     @Override
