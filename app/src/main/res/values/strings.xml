@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">GitHub Reopos</string>
     <string name="action_settings">Settings</string>
+    <string name="empty_view_label_primary">Some Thing Went Wrong</string>
+    <string name="empty_view_label_secondary">An alien is probably blocking your network</string>
+    <string name="retry">Retry</string>
 </resources>

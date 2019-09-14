@@ -1,6 +1,6 @@
 package com.mondiamedia.ahmedbadr.githubreopos.models;
 
-public class Repository {
+public class GitHubRepository {
 
     private String author;
     private String name;
@@ -11,7 +11,7 @@ public class Repository {
     private String stars;
     private String forks;
 
-    public Repository(String author, String name, String avatar, String description, String language, String languageColor, String stars, String forks) {
+    public GitHubRepository(String author, String name, String avatar, String description, String language, String languageColor, String stars, String forks) {
         this.author = author;
         this.name = name;
         this.avatar = avatar;
