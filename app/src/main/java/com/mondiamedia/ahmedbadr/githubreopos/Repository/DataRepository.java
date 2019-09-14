@@ -1,6 +1,5 @@
 package com.mondiamedia.ahmedbadr.githubreopos.Repository;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
@@ -16,8 +15,9 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DataRepository {
 
+    private static final String TAG = DataRepository.class.getSimpleName();
     private MutableLiveData<List<GitHubRepository>> mReposList = new MutableLiveData<>();
-    private RestClient restClient;
+    private RestClient mRestClient;
 
     private static DataRepository sDataRepository;
 
@@ -29,23 +29,22 @@ public class DataRepository {
     }
 
     private DataRepository() {
-        restClient = new RestClient();
+        mRestClient = new RestClient();
     }
 
     public MutableLiveData<List<GitHubRepository>> getRepos() {
-        Log.d("DataRepository  " , "Call");
-        ApiInterfaces apiInterfaces = restClient.createService(ApiInterfaces.class);
+        ApiInterfaces apiInterfaces = mRestClient.createService(ApiInterfaces.class);
         Observable<List<GitHubRepository>> call =
                 apiInterfaces.getRepositories();
         call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(gitHubRepositoryBaseResponse -> {
-                    Log.d("DataRepository  " , gitHubRepositoryBaseResponse.toString());
+                    Log.d(TAG, "success");
                     if (gitHubRepositoryBaseResponse != null) {
                         mReposList.setValue(gitHubRepositoryBaseResponse);
                     }
                 }, throwable -> {
                     mReposList.setValue(null);
-                    Log.d("DataRepository  " , throwable.getMessage());
+                    Log.d(TAG, throwable.getMessage());
                 });
 
         return mReposList;

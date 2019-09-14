@@ -26,4 +26,9 @@ public class RepositoriesViewModel extends ViewModel {
     public LiveData<List<GitHubRepository>> getRepos() {
         return mReposList;
     }
+
+    public LiveData<List<GitHubRepository>> refreshRepos() {
+        mReposList = dataRepository.getRepos();
+        return mReposList;
+    }
 }

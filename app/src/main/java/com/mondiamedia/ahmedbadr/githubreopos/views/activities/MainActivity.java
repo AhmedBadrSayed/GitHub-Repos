@@ -1,7 +1,9 @@
 package com.mondiamedia.ahmedbadr.githubreopos.views.activities;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.mondiamedia.ahmedbadr.githubreopos.R;
 import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
@@ -27,10 +31,15 @@ public class MainActivity extends AppCompatActivity {
     SwipeRefreshLayout mSwipeContainer;
     @BindView(R.id.repos_recycler_view)
     RecyclerView mReposRecyclerView;
+    @BindView(R.id.empty_view_layout)
+    ConstraintLayout mEmptyViewLayout;
+    @BindView(R.id.empty_view_retry_btn)
+    Button mRetryBtn;
 
     private ReposRecyclerViewAdapter mReposRecyclerViewAdapter;
     private List<GitHubRepository> mReposList = new ArrayList<>();
-    private RepositoriesViewModel repositoriesViewModel;
+    private RepositoriesViewModel mRepositoriesViewModel;
+    private Observer<List<GitHubRepository>> mLiveDataObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,19 +49,50 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
+        initViews();
+    }
+
+    private void initViews() {
+        setupReposRecyclerView();
+
+        mLiveDataObserver = listLiveData -> {
+            mSwipeContainer.setRefreshing(false);
+            mReposList.clear();
+            if (listLiveData != null) {
+                mReposList.addAll(listLiveData);
+                mReposRecyclerViewAdapter.notifyDataSetChanged();
+                mReposRecyclerView.setVisibility(View.VISIBLE);
+                mEmptyViewLayout.setVisibility(View.GONE);
+            } else {
+                mReposRecyclerView.setVisibility(View.GONE);
+                mEmptyViewLayout.setVisibility(View.VISIBLE);
+            }
+        };
+
+        mRepositoriesViewModel = ViewModelProviders.of(this).get(RepositoriesViewModel.class);
+        mRepositoriesViewModel.init();
+
+        getAndBindTrendingRepos();
+
+        mSwipeContainer.setOnRefreshListener(() -> refreshedRepos());
+
+        mRetryBtn.setOnClickListener(v -> refreshedRepos());
+    }
+
+    private void setupReposRecyclerView() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mReposRecyclerView.setLayoutManager(layoutManager);
 
         mReposRecyclerViewAdapter = new ReposRecyclerViewAdapter(mReposList, this);
         mReposRecyclerView.setAdapter(mReposRecyclerViewAdapter);
+    }
 
-        repositoriesViewModel = ViewModelProviders.of(this).get(RepositoriesViewModel.class);
-        repositoriesViewModel.init();
-        repositoriesViewModel.getRepos().observe(this, reposResponse -> {
-            mReposList = reposResponse;
-            mReposRecyclerViewAdapter.notifyDataSetChanged();
-        });
+    private void getAndBindTrendingRepos() {
+        mRepositoriesViewModel.getRepos().observe(this, mLiveDataObserver);
+    }
 
+    private void refreshedRepos() {
+        mRepositoriesViewModel.refreshRepos().observe(this, mLiveDataObserver);
     }
 
     @Override
