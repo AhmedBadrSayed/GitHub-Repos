@@ -1,7 +1,12 @@
 package com.mondiamedia.ahmedbadr.githubreopos.models;
 
-public class GitHubRepository {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class GitHubRepository extends RealmObject {
+
+    @PrimaryKey
+    private String url;
     private String author;
     private String name;
     private String avatar;
@@ -11,7 +16,11 @@ public class GitHubRepository {
     private String stars;
     private String forks;
 
-    public GitHubRepository(String author, String name, String avatar, String description, String language, String languageColor, String stars, String forks) {
+    public GitHubRepository() {
+    }
+
+    public GitHubRepository(String url, String author, String name, String avatar, String description, String language, String languageColor, String stars, String forks) {
+        this.url = url;
         this.author = author;
         this.name = name;
         this.avatar = avatar;
@@ -52,5 +61,13 @@ public class GitHubRepository {
 
     public String getForks() {
         return forks;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
