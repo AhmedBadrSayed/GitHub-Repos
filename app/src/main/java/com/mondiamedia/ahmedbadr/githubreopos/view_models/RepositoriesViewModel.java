@@ -34,7 +34,7 @@ public class RepositoriesViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<GitHubRepository>> refreshRepos() {
-        mReposList = dataRepository.getRepos();
+        mReposList = dataRepository.getRefreshRepos();
         return mReposList;
     }
 }

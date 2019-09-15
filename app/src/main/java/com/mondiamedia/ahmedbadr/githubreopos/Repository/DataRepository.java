@@ -53,14 +53,14 @@ public class DataRepository {
         mReposList.setValue(mGitHubRepositoryRealmList);
 
         if (mReposList.getValue() == null || mReposList.getValue().size() == 0) {
-            refreshRepos();
+            return getRefreshRepos();
         }
 
         return mReposList;
     }
 
     @SuppressLint("CheckResult")
-    public void refreshRepos() {
+    public MutableLiveData<List<GitHubRepository>> getRefreshRepos() {
         ApiInterfaces apiInterfaces = mRestClient.createService(ApiInterfaces.class);
         Observable<List<GitHubRepository>> call =
                 apiInterfaces.getRepositories();
@@ -83,6 +83,7 @@ public class DataRepository {
                     mReposList.setValue(null);
                     Log.d(TAG, throwable.getMessage());
                 });
+        return mReposList;
     }
 
     private void saveReposList(List<GitHubRepository> gitHubRepositories) {
