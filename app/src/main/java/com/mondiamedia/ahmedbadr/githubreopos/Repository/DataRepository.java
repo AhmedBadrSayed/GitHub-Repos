@@ -24,8 +24,8 @@ import io.realm.Realm;
 public class DataRepository {
 
     private static final String TAG = DataRepository.class.getSimpleName();
-    private MutableLiveData<List<GitHubRepository>> mReposList = new MutableLiveData<>();
-    private List<GitHubRepository> mGitHubRepositoryRealmList;
+    private MutableLiveData<List<GitHubRepository>> mRepositoriesList = new MutableLiveData<>();
+    private List<GitHubRepository> mRepositoriesRealmList;
     private RestClient mRestClient;
     private Realm realm;
     private FirebaseJobDispatcher mDispatcher;
@@ -47,16 +47,16 @@ public class DataRepository {
 
     public MutableLiveData<List<GitHubRepository>> getRepos() {
         realm.beginTransaction();
-        mGitHubRepositoryRealmList = realm.where(GitHubRepository.class).findAll();
+        mRepositoriesRealmList = realm.where(GitHubRepository.class).findAll();
         realm.commitTransaction();
 
-        mReposList.setValue(mGitHubRepositoryRealmList);
+        mRepositoriesList.setValue(mRepositoriesRealmList);
 
-        if (mReposList.getValue() == null || mReposList.getValue().size() == 0) {
+        if (mRepositoriesList.getValue() == null || mRepositoriesList.getValue().size() == 0) {
             return getRefreshRepos();
         }
 
-        return mReposList;
+        return mRepositoriesList;
     }
 
     @SuppressLint("CheckResult")
@@ -68,22 +68,23 @@ public class DataRepository {
                 .subscribe(gitHubRepositoryResponse -> {
                     Log.d(TAG, "success");
                     if (gitHubRepositoryResponse != null) {
-                        mReposList.setValue(gitHubRepositoryResponse);
+                        mRepositoriesList.setValue(gitHubRepositoryResponse);
                         saveReposList(gitHubRepositoryResponse);
 
                         Job deleteCashJob = mDispatcher.newJobBuilder()
                                 .setService(DeleteCashService.class)
                                 .setTag("DeleteCashService")
+                                .setReplaceCurrent(true)
                                 .setTrigger(Trigger.executionWindow(60 * 120, 60 * 120))
                                 .build();
 
                         mDispatcher.mustSchedule(deleteCashJob);
                     }
                 }, throwable -> {
-                    mReposList.setValue(null);
+                    mRepositoriesList.setValue(null);
                     Log.d(TAG, throwable.getMessage());
                 });
-        return mReposList;
+        return mRepositoriesList;
     }
 
     private void saveReposList(List<GitHubRepository> gitHubRepositories) {

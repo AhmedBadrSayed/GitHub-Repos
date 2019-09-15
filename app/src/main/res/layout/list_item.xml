@@ -48,6 +48,7 @@
             tools:text="NewPipe" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/repo_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,6 +60,7 @@
             tools:text="A libre lightweight streaming front-end for Android." />
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/language_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -68,6 +70,7 @@
             app:layout_constraintTop_toBottomOf="@+id/repo_description" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -81,6 +84,7 @@
             tools:text="Java" />
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/star_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -91,6 +95,7 @@
             app:layout_constraintTop_toBottomOf="@+id/repo_description" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/stars_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -104,6 +109,7 @@
             tools:text="15,334" />
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/fork_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -114,6 +120,7 @@
             app:layout_constraintTop_toBottomOf="@+id/repo_description" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/forks_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

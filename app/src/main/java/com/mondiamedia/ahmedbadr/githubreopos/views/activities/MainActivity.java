@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.mondiamedia.ahmedbadr.githubreopos.R;
 import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
 import com.mondiamedia.ahmedbadr.githubreopos.view_models.RepositoriesViewModel;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.swipeContainer)
     SwipeRefreshLayout mSwipeContainer;
+    @BindView(R.id.shimmer_frame_layout)
+    ShimmerFrameLayout mShimmerFrameLayout;
     @BindView(R.id.repos_recycler_view)
     RecyclerView mReposRecyclerView;
     @BindView(R.id.empty_view_layout)
@@ -53,9 +56,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        mShimmerFrameLayout.startShimmer();
         setupReposRecyclerView();
 
         mLiveDataObserver = listLiveData -> {
+            mShimmerFrameLayout.stopShimmer();
+            mShimmerFrameLayout.setVisibility(View.GONE);
             mSwipeContainer.setRefreshing(false);
             mReposList.clear();
             if (listLiveData != null) {
@@ -74,7 +80,12 @@ public class MainActivity extends AppCompatActivity {
 
         getAndBindTrendingRepos();
 
-        mSwipeContainer.setOnRefreshListener(() -> refreshedRepos());
+        mSwipeContainer.setOnRefreshListener(() -> {
+            mShimmerFrameLayout.startShimmer();
+            mShimmerFrameLayout.setVisibility(View.VISIBLE);
+            mReposRecyclerView.setVisibility(View.GONE);
+            refreshedRepos();
+        });
 
         mRetryBtn.setOnClickListener(v -> refreshedRepos());
     }
