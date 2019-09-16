@@ -6,7 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
-import com.mondiamedia.ahmedbadr.githubreopos.Repository.DataRepository;
+import com.mondiamedia.ahmedbadr.githubreopos.repository.DataRepository;
 import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.mondiamedia.ahmedbadr.githubreopos.Repository;
+package com.mondiamedia.ahmedbadr.githubreopos.repository;
 
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.MutableLiveData;

@@ -4,7 +4,7 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule;
 import android.arch.lifecycle.Observer;
 import android.support.test.InstrumentationRegistry;
 
-import com.mondiamedia.ahmedbadr.githubreopos.Repository.DataRepository;
+import com.mondiamedia.ahmedbadr.githubreopos.repository.DataRepository;
 import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
 
 import org.junit.After;
