@@ -5,25 +5,22 @@ import android.support.annotation.NonNull;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
-import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
 
 import io.realm.Realm;
 
 public class DeleteCashService extends JobService {
 
-    private Realm realm;
+    private Realm mRealm;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        realm = Realm.getDefaultInstance();
+        mRealm = Realm.getDefaultInstance();
     }
 
     @Override
     public boolean onStartJob(@NonNull JobParameters job) {
-        realm.beginTransaction();
-        realm.delete(GitHubRepository.class);
-        realm.commitTransaction();
+        mRealm.executeTransaction(realm -> realm.deleteAll());
         return false;
     }
 

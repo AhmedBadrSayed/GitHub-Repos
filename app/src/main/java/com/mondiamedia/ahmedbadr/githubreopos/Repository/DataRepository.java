@@ -27,7 +27,7 @@ public class DataRepository {
     private MutableLiveData<List<GitHubRepository>> mRepositoriesList = new MutableLiveData<>();
     private List<GitHubRepository> mRepositoriesRealmList;
     private RestClient mRestClient;
-    private Realm realm;
+    private Realm mRealm;
     private FirebaseJobDispatcher mDispatcher;
 
     private static DataRepository sDataRepository;
@@ -42,13 +42,11 @@ public class DataRepository {
     private DataRepository(Context context) {
         mRestClient = new RestClient();
         mDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
-        realm = Realm.getDefaultInstance();
+        mRealm = Realm.getDefaultInstance();
     }
 
     public MutableLiveData<List<GitHubRepository>> getRepos() {
-        realm.beginTransaction();
-        mRepositoriesRealmList = realm.where(GitHubRepository.class).findAll();
-        realm.commitTransaction();
+        mRepositoriesRealmList = getLocalRepos();
 
         mRepositoriesList.setValue(mRepositoriesRealmList);
 
@@ -87,9 +85,15 @@ public class DataRepository {
         return mRepositoriesList;
     }
 
-    private void saveReposList(List<GitHubRepository> gitHubRepositories) {
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(gitHubRepositories);
-        realm.commitTransaction();
+    public void saveReposList(List<GitHubRepository> gitHubRepositories) {
+        mRealm.executeTransaction(realm -> realm.copyToRealmOrUpdate(gitHubRepositories));
+    }
+
+    public List<GitHubRepository> getLocalRepos() {
+        return mRealm.where(GitHubRepository.class).findAll();
+    }
+
+    public void deletLocalData() {
+        mRealm.executeTransaction(realm -> realm.deleteAll());
     }
 }

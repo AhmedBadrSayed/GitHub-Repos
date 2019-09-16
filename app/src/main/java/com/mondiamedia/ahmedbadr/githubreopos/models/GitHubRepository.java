@@ -19,7 +19,8 @@ public class GitHubRepository extends RealmObject {
     public GitHubRepository() {
     }
 
-    public GitHubRepository(String url, String author, String name, String avatar, String description, String language, String languageColor, String stars, String forks) {
+    public GitHubRepository(String url, String author, String name, String avatar, String description,
+                            String language, String languageColor, String stars, String forks) {
         this.url = url;
         this.author = author;
         this.name = name;
