@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.mondiamedia.ahmedbadr.githubreopos.Application;
 import com.mondiamedia.ahmedbadr.githubreopos.R;
 import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
 import com.mondiamedia.ahmedbadr.githubreopos.view_models.RepositoriesViewModel;
@@ -22,6 +23,8 @@ import com.mondiamedia.ahmedbadr.githubreopos.views.adapters.ReposRecyclerViewAd
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,13 +42,16 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.empty_view_retry_btn)
     Button mRetryBtn;
 
+    @Inject
+    public RepositoriesViewModel mRepositoriesViewModel;
+    private Observer<List<GitHubRepository>> mLiveDataObserver;
+
     private ReposRecyclerViewAdapter mReposRecyclerViewAdapter;
     private List<GitHubRepository> mReposList = new ArrayList<>();
-    private RepositoriesViewModel mRepositoriesViewModel;
-    private Observer<List<GitHubRepository>> mLiveDataObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((Application) getApplicationContext()).applicationComponent.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -75,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        mRepositoriesViewModel = ViewModelProviders.of(this).get(RepositoriesViewModel.class);
         mRepositoriesViewModel.init();
 
         getAndBindTrendingRepos();

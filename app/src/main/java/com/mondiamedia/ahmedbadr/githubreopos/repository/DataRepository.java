@@ -2,19 +2,15 @@ package com.mondiamedia.ahmedbadr.githubreopos.repository;
 
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.MutableLiveData;
-import android.content.Context;
 import android.util.Log;
 
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
-import com.firebase.jobdispatcher.GooglePlayDriver;
-import com.firebase.jobdispatcher.Job;
-import com.firebase.jobdispatcher.Trigger;
-import com.mondiamedia.ahmedbadr.githubreopos.api.ApiInterfaces;
-import com.mondiamedia.ahmedbadr.githubreopos.api.RestClient;
+import com.mondiamedia.ahmedbadr.githubreopos.api.RemoteDataSource;
+import com.mondiamedia.ahmedbadr.githubreopos.api.RepositoriesService;
 import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
-import com.mondiamedia.ahmedbadr.githubreopos.service.DeleteCashService;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -25,32 +21,21 @@ public class DataRepository {
 
     private static final String TAG = DataRepository.class.getSimpleName();
     private MutableLiveData<List<GitHubRepository>> mRepositoriesList = new MutableLiveData<>();
-    private List<GitHubRepository> mRepositoriesRealmList;
-    private RestClient mRestClient;
+    private RemoteDataSource mRemoteDataSource;
     private Realm mRealm;
-    private FirebaseJobDispatcher mDispatcher;
 
-    private static DataRepository sDataRepository;
-
-    public static DataRepository getInstance(Context context) {
-        if (sDataRepository == null) {
-            sDataRepository = new DataRepository(context);
-        }
-        return sDataRepository;
-    }
-
-    private DataRepository(Context context) {
-        mRestClient = new RestClient();
-        mDispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
+    @Inject
+    public DataRepository(RemoteDataSource remoteDataSource) {
+        this.mRemoteDataSource = remoteDataSource;
         mRealm = Realm.getDefaultInstance();
     }
 
     public MutableLiveData<List<GitHubRepository>> getRepos() {
-        mRepositoriesRealmList = getLocalRepos();
+        List<GitHubRepository> repositoriesRealmList = getLocalRepos();
 
-        mRepositoriesList.setValue(mRepositoriesRealmList);
+        mRepositoriesList.setValue(repositoriesRealmList);
 
-        if (mRepositoriesList.getValue() == null || mRepositoriesList.getValue().size() == 0) {
+        if (mRepositoriesList.getValue() == null || mRepositoriesList.getValue().isEmpty()) {
             return getRefreshRepos();
         }
 
@@ -59,9 +44,8 @@ public class DataRepository {
 
     @SuppressLint("CheckResult")
     public MutableLiveData<List<GitHubRepository>> getRefreshRepos() {
-        ApiInterfaces apiInterfaces = mRestClient.createService(ApiInterfaces.class);
-        Observable<List<GitHubRepository>> call =
-                apiInterfaces.getRepositories();
+        RepositoriesService repositoriesService = mRemoteDataSource.createRepositoriesService();
+        Observable<List<GitHubRepository>> call = repositoriesService.getRepositories();
         call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(gitHubRepositoryResponse -> {
                     Log.d(TAG, "success");
@@ -69,14 +53,14 @@ public class DataRepository {
                         mRepositoriesList.setValue(gitHubRepositoryResponse);
                         saveReposList(gitHubRepositoryResponse);
 
-                        Job deleteCashJob = mDispatcher.newJobBuilder()
-                                .setService(DeleteCashService.class)
-                                .setTag("DeleteCashService")
-                                .setReplaceCurrent(true)
-                                .setTrigger(Trigger.executionWindow(60 * 120, 60 * 120))
-                                .build();
-
-                        mDispatcher.mustSchedule(deleteCashJob);
+//                        Job deleteCashJob = mDispatcher.newJobBuilder()
+//                                .setService(DeleteCashService.class)
+//                                .setTag("DeleteCashService")
+//                                .setReplaceCurrent(true)
+//                                .setTrigger(Trigger.executionWindow(60 * 120, 60 * 120))
+//                                .build();
+//
+//                        mDispatcher.mustSchedule(deleteCashJob);
                     }
                 }, throwable -> {
                     mRepositoriesList.setValue(null);
@@ -93,7 +77,7 @@ public class DataRepository {
         return mRealm.where(GitHubRepository.class).findAll();
     }
 
-    public void deletLocalData() {
-        mRealm.executeTransaction(realm -> realm.deleteAll());
+    public void deleteLocalData() {
+        mRealm.executeTransaction(Realm::deleteAll);
     }
 }

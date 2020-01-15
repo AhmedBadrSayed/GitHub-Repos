@@ -13,6 +13,8 @@ import com.mondiamedia.ahmedbadr.githubreopos.R;
 import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
 import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,15 +33,15 @@ public class ReposRecyclerViewAdapter extends RecyclerView.Adapter<ReposRecycler
         this.mCollapsingStatesList = new ArrayList<>(mGitHubRepositoryList.size());
     }
 
+    @NotNull
     @Override
     public ReposViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
-        ReposViewHolder reposViewHolder = new ReposViewHolder(v);
-        return reposViewHolder;
+        return new ReposViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ReposViewHolder holder, int position) {
+    public void onBindViewHolder(@NotNull ReposViewHolder holder, int position) {
         GitHubRepository gitHubRepository = mGitHubRepositoryList.get(position);
 
         mCollapsingStatesList.clear();
@@ -77,11 +79,6 @@ public class ReposRecyclerViewAdapter extends RecyclerView.Adapter<ReposRecycler
         return mGitHubRepositoryList.size();
     }
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
     public class ReposViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.repo_card)
@@ -107,7 +104,7 @@ public class ReposRecyclerViewAdapter extends RecyclerView.Adapter<ReposRecycler
         @BindView(R.id.forks_count)
         TextView forksCount;
 
-        public ReposViewHolder(View itemView) {
+        ReposViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);

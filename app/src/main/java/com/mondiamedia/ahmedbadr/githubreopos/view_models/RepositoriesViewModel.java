@@ -1,23 +1,24 @@
 package com.mondiamedia.ahmedbadr.githubreopos.view_models;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
+import android.arch.lifecycle.ViewModel;
 
-import com.mondiamedia.ahmedbadr.githubreopos.repository.DataRepository;
 import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
+import com.mondiamedia.ahmedbadr.githubreopos.repository.DataRepository;
 
 import java.util.List;
 
-public class RepositoriesViewModel extends AndroidViewModel {
+import javax.inject.Inject;
 
-    private MutableLiveData<List<GitHubRepository>> mReposList;
+public class RepositoriesViewModel extends ViewModel {
+
     private DataRepository dataRepository;
+    private MutableLiveData<List<GitHubRepository>> mReposList;
 
-    public RepositoriesViewModel(@NonNull Application application) {
-        super(application);
+    @Inject
+    public RepositoriesViewModel(DataRepository dataRepository) {
+        this.dataRepository = dataRepository;
     }
 
     public void init() {
@@ -25,7 +26,6 @@ public class RepositoriesViewModel extends AndroidViewModel {
             return;
         }
 
-        dataRepository = DataRepository.getInstance(getApplication());
         mReposList = dataRepository.getRepos();
     }
 

@@ -41,7 +41,7 @@ public class DataRepositoryUnitTest {
 
     @Before
     public void initiate() {
-        mDataRepository = DataRepository.getInstance(InstrumentationRegistry.getTargetContext());
+//        mDataRepository = DataRepository.getInstance(InstrumentationRegistry.getTargetContext());
     }
 
     @Test
@@ -96,6 +96,6 @@ public class DataRepositoryUnitTest {
 
     @After
     public void tearDown() {
-        mDataRepository.deletLocalData();
+        mDataRepository.deleteLocalData();
     }
 }

@@ -20,7 +20,7 @@ public class DeleteCashService extends JobService {
 
     @Override
     public boolean onStartJob(@NonNull JobParameters job) {
-        mRealm.executeTransaction(realm -> realm.deleteAll());
+        mRealm.executeTransaction(Realm::deleteAll);
         return false;
     }
 

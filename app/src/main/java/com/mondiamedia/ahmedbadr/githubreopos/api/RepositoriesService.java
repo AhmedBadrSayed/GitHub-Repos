@@ -7,7 +7,7 @@ import java.util.List;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 
-public interface ApiInterfaces {
+public interface RepositoriesService {
 
     @GET("/repositories")
     Observable<List<GitHubRepository>> getRepositories();
