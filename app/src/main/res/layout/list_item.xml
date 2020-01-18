@@ -1,138 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/repo_card"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_centerHorizontal="true"
-    android:layout_margin="3dp"
-    card_view:cardCornerRadius="5dp"
-    card_view:cardElevation="2dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.constraint.ConstraintLayout
+    <data class="RepositoriesDataBinding">
+
+        <variable
+            name="gitHubRepository"
+            type="com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/repo_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_margin="3dp"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="2dp">
 
-        <ImageView
-            android:id="@+id/author_image"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_person_black_24dp" />
-
-        <TextView
-            android:id="@+id/author_name"
-            android:layout_width="wrap_content"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textColor="#52575c"
-            android:textSize="7pt"
-            app:layout_constraintStart_toEndOf="@+id/author_image"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="TeamNewPipe" />
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/repo_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="#52575c"
-            android:textSize="8pt"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/author_name"
-            app:layout_constraintTop_toBottomOf="@+id/author_name"
-            tools:text="NewPipe" />
+            <ImageView
+                android:id="@+id/author_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_person_black_24dp" />
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/repo_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="#52575c"
-            android:textSize="7pt"
-            app:layout_constraintStart_toStartOf="@+id/repo_title"
-            app:layout_constraintTop_toBottomOf="@+id/repo_title"
-            tools:text="A libre lightweight streaming front-end for Android." />
+            <TextView
+                android:id="@+id/author_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{gitHubRepository.author}"
+                android:textColor="#52575c"
+                android:textSize="7pt"
+                app:layout_constraintStart_toEndOf="@+id/author_image"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="TeamNewPipe" />
 
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/language_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/circle_shape"
-            app:layout_constraintStart_toStartOf="@+id/repo_description"
-            app:layout_constraintTop_toBottomOf="@+id/repo_description" />
+            <TextView
+                android:id="@+id/repo_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@{gitHubRepository.name}"
+                android:textColor="#52575c"
+                android:textSize="8pt"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/author_name"
+                app:layout_constraintTop_toBottomOf="@+id/author_name"
+                tools:text="NewPipe" />
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/language"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textColor="#52575c"
-            android:textSize="7pt"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/language_icon"
-            app:layout_constraintStart_toEndOf="@+id/language_icon"
-            app:layout_constraintTop_toTopOf="@+id/language_icon"
-            tools:text="Java" />
+            <TextView
+                android:id="@+id/repo_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@{gitHubRepository.description}"
+                android:textColor="#52575c"
+                android:textSize="7pt"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/repo_title"
+                app:layout_constraintTop_toBottomOf="@+id/repo_title"
+                tools:text="A libre lightweight streaming front-end for Android." />
 
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/star_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/star_yellow_16"
-            app:layout_constraintStart_toEndOf="@+id/language"
-            app:layout_constraintTop_toBottomOf="@+id/repo_description" />
+            <ImageView
+                android:id="@+id/language_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/circle_shape"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/repo_description"
+                app:layout_constraintTop_toBottomOf="@+id/repo_description" />
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/stars_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textColor="#52575c"
-            android:textSize="7pt"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/star_icon"
-            app:layout_constraintStart_toEndOf="@+id/star_icon"
-            app:layout_constraintTop_toTopOf="@+id/star_icon"
-            tools:text="15,334" />
+            <TextView
+                android:id="@+id/language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{gitHubRepository.language}"
+                android:textColor="#52575c"
+                android:textSize="7pt"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/language_icon"
+                app:layout_constraintStart_toEndOf="@+id/language_icon"
+                app:layout_constraintTop_toTopOf="@+id/language_icon"
+                tools:text="Java" />
 
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/fork_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/fork_black_16"
-            app:layout_constraintStart_toEndOf="@+id/stars_count"
-            app:layout_constraintTop_toBottomOf="@+id/repo_description" />
+            <ImageView
+                android:id="@+id/star_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/star_yellow_16"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@+id/language"
+                app:layout_constraintTop_toBottomOf="@+id/repo_description" />
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/forks_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textColor="#52575c"
-            android:textSize="7pt"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/fork_icon"
-            app:layout_constraintStart_toEndOf="@+id/fork_icon"
-            app:layout_constraintTop_toTopOf="@+id/fork_icon"
-            tools:text="5,864" />
+            <TextView
+                android:id="@+id/stars_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{gitHubRepository.stars}"
+                android:textColor="#52575c"
+                android:textSize="7pt"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/star_icon"
+                app:layout_constraintStart_toEndOf="@+id/star_icon"
+                app:layout_constraintTop_toTopOf="@+id/star_icon"
+                tools:text="15,334" />
 
-    </android.support.constraint.ConstraintLayout>
+            <ImageView
+                android:id="@+id/fork_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/fork_black_16"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@+id/stars_count"
+                app:layout_constraintTop_toBottomOf="@+id/repo_description" />
 
-</android.support.v7.widget.CardView>
+            <TextView
+                android:id="@+id/forks_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@{gitHubRepository.forks}"
+                android:textColor="#52575c"
+                android:textSize="7pt"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/fork_icon"
+                app:layout_constraintStart_toEndOf="@+id/fork_icon"
+                app:layout_constraintTop_toTopOf="@+id/fork_icon"
+                tools:text="5,864" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+</layout>

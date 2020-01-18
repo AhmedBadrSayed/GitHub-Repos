@@ -1,22 +1,19 @@
 package com.mondiamedia.ahmedbadr.githubreopos.views.activities;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.mondiamedia.ahmedbadr.githubreopos.Application;
 import com.mondiamedia.ahmedbadr.githubreopos.R;
+import com.mondiamedia.ahmedbadr.githubreopos.databinding.ActivityMainBinding;
+import com.mondiamedia.ahmedbadr.githubreopos.databinding.ContentMainBinding;
 import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
 import com.mondiamedia.ahmedbadr.githubreopos.view_models.RepositoriesViewModel;
 import com.mondiamedia.ahmedbadr.githubreopos.views.adapters.ReposRecyclerViewAdapter;
@@ -26,21 +23,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.swipeContainer)
-    SwipeRefreshLayout mSwipeContainer;
-    @BindView(R.id.shimmer_frame_layout)
-    ShimmerFrameLayout mShimmerFrameLayout;
-    @BindView(R.id.repos_recycler_view)
-    RecyclerView mReposRecyclerView;
-    @BindView(R.id.empty_view_layout)
-    ConstraintLayout mEmptyViewLayout;
-    @BindView(R.id.empty_view_retry_btn)
-    Button mRetryBtn;
+    ActivityMainBinding mActivityMainBinding;
+    ContentMainBinding mContentMainBinding;
 
     @Inject
     public RepositoriesViewModel mRepositoriesViewModel;
@@ -53,58 +39,69 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         ((Application) getApplicationContext()).applicationComponent.inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ButterKnife.bind(this);
+        mActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mContentMainBinding = DataBindingUtil.setContentView(this, R.layout.content_main);
+        setSupportActionBar(mActivityMainBinding.toolbar);
 
         initViews();
     }
 
     private void initViews() {
-        mShimmerFrameLayout.startShimmer();
+        startShimmerEffect();
         setupReposRecyclerView();
 
         mLiveDataObserver = listLiveData -> {
-            mShimmerFrameLayout.stopShimmer();
-            mShimmerFrameLayout.setVisibility(View.GONE);
-            mSwipeContainer.setRefreshing(false);
+            stopShimmerEffect();
+            mContentMainBinding.swipeContainer.setRefreshing(false);
             mReposList.clear();
-            if (listLiveData != null) {
-                mReposList.addAll(listLiveData);
-                mReposRecyclerViewAdapter.notifyDataSetChanged();
-                mReposRecyclerView.setVisibility(View.VISIBLE);
-                mEmptyViewLayout.setVisibility(View.GONE);
-            } else {
-                mReposRecyclerView.setVisibility(View.GONE);
-                mEmptyViewLayout.setVisibility(View.VISIBLE);
+
+            if (listLiveData == null) {
+                mContentMainBinding.reposRecyclerView.setVisibility(View.GONE);
+                mContentMainBinding.emptyViewLayout.setVisibility(View.VISIBLE);
+                return;
             }
+
+            mReposList.addAll(listLiveData);
+            mReposRecyclerViewAdapter.notifyDataSetChanged();
+            mContentMainBinding.reposRecyclerView.setVisibility(View.VISIBLE);
+            mContentMainBinding.emptyViewLayout.setVisibility(View.GONE);
         };
 
         mRepositoriesViewModel.init();
 
         getAndBindTrendingRepos();
 
-        mSwipeContainer.setOnRefreshListener(() -> {
-            mShimmerFrameLayout.startShimmer();
-            mShimmerFrameLayout.setVisibility(View.VISIBLE);
-            mReposRecyclerView.setVisibility(View.GONE);
+        mContentMainBinding.swipeContainer.setOnRefreshListener(() -> {
+            startShimmerEffect();
+            mContentMainBinding.reposRecyclerView.setVisibility(View.GONE);
             refreshedRepos();
         });
+    }
 
-        mRetryBtn.setOnClickListener(v -> refreshedRepos());
+    void startShimmerEffect() {
+        mContentMainBinding.shimmerFrameLayout.startShimmer();
+        mContentMainBinding.shimmerFrameLayout.setVisibility(View.VISIBLE);
+    }
+
+    void stopShimmerEffect() {
+        mContentMainBinding.shimmerFrameLayout.stopShimmer();
+        mContentMainBinding.shimmerFrameLayout.setVisibility(View.GONE);
     }
 
     private void setupReposRecyclerView() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        mReposRecyclerView.setLayoutManager(layoutManager);
+        mContentMainBinding.reposRecyclerView.setLayoutManager(layoutManager);
 
         mReposRecyclerViewAdapter = new ReposRecyclerViewAdapter(mReposList, this);
-        mReposRecyclerView.setAdapter(mReposRecyclerViewAdapter);
+        mContentMainBinding.reposRecyclerView.setAdapter(mReposRecyclerViewAdapter);
     }
 
     private void getAndBindTrendingRepos() {
         mRepositoriesViewModel.getRepos().observe(this, mLiveDataObserver);
+    }
+
+    public void refreshedRepos(View view) {
+        refreshedRepos();
     }
 
     private void refreshedRepos() {
