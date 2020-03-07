@@ -7,8 +7,8 @@
     <data class="RepositoriesDataBinding">
 
         <variable
-            name="gitHubRepository"
-            type="com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository" />
+            name="gitRepo"
+            type="com.mondiamedia.ahmedbadr.githubreopos.models.GitRepo" />
     </data>
 
     <android.support.v7.widget.CardView
@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="@{gitHubRepository.author}"
+                android:text="@{gitRepo.author}"
                 android:textColor="#52575c"
                 android:textSize="7pt"
                 app:layout_constraintStart_toEndOf="@+id/author_image"
@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{gitHubRepository.name}"
+                android:text="@{gitRepo.name}"
                 android:textColor="#52575c"
                 android:textSize="8pt"
                 android:textStyle="bold"
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{gitHubRepository.description}"
+                android:text="@{gitRepo.description}"
                 android:textColor="#52575c"
                 android:textSize="7pt"
                 android:visibility="gone"
@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{gitHubRepository.language}"
+                android:text="@{gitRepo.language}"
                 android:textColor="#52575c"
                 android:textSize="7pt"
                 android:textStyle="bold"
@@ -111,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{gitHubRepository.stars}"
+                android:text="@{gitRepo.stars}"
                 android:textColor="#52575c"
                 android:textSize="7pt"
                 android:textStyle="bold"
@@ -137,7 +137,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="@{gitHubRepository.forks}"
+                android:text="@{gitRepo.forks}"
                 android:textColor="#52575c"
                 android:textSize="7pt"
                 android:textStyle="bold"

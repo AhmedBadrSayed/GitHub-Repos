@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.mondiamedia.ahmedbadr.githubreopos.R;
 import com.mondiamedia.ahmedbadr.githubreopos.databinding.RepositoriesDataBinding;
-import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
+import com.mondiamedia.ahmedbadr.githubreopos.models.GitRepo;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,14 +20,14 @@ import java.util.List;
 
 public class ReposRecyclerViewAdapter extends RecyclerView.Adapter<ReposRecyclerViewAdapter.ReposViewHolder> {
 
-    private List<GitHubRepository> mGitHubRepositoryList;
+    private List<GitRepo> mGitRepoList;
     private List<Boolean> mCollapsingStatesList;
     private Context mContext;
 
-    public ReposRecyclerViewAdapter(List<GitHubRepository> repositories, Context context) {
+    public ReposRecyclerViewAdapter(List<GitRepo> repositories, Context context) {
         this.mContext = context;
-        this.mGitHubRepositoryList = repositories;
-        this.mCollapsingStatesList = new ArrayList<>(mGitHubRepositoryList.size());
+        this.mGitRepoList = repositories;
+        this.mCollapsingStatesList = new ArrayList<>(mGitRepoList.size());
     }
 
     @NotNull
@@ -40,15 +40,15 @@ public class ReposRecyclerViewAdapter extends RecyclerView.Adapter<ReposRecycler
 
     @Override
     public void onBindViewHolder(@NotNull ReposViewHolder holder, int position) {
-        GitHubRepository gitHubRepository = mGitHubRepositoryList.get(position);
+        GitRepo gitRepo = mGitRepoList.get(position);
 
         mCollapsingStatesList.clear();
-        while (mCollapsingStatesList.size() < mGitHubRepositoryList.size()) {
+        while (mCollapsingStatesList.size() < mGitRepoList.size()) {
             mCollapsingStatesList.add(false);
         }
 
-        holder.mRepositoriesDataBinding.setGitHubRepository(gitHubRepository);
-        Picasso.with(mContext).load(gitHubRepository.getAvatar()).into(holder.getmRepositoriesDataBinding().authorImage);
+        holder.mRepositoriesDataBinding.setGitRepo(gitRepo);
+        Picasso.with(mContext).load(gitRepo.getAvatar()).into(holder.getmRepositoriesDataBinding().authorImage);
         holder.getmRepositoriesDataBinding().authorImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         holder.getmRepositoriesDataBinding().repoCard.setOnClickListener(v -> {
@@ -69,7 +69,7 @@ public class ReposRecyclerViewAdapter extends RecyclerView.Adapter<ReposRecycler
 
     @Override
     public int getItemCount() {
-        return mGitHubRepositoryList.size();
+        return mGitRepoList.size();
     }
 
     public class ReposViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -1,20 +1,11 @@
 package com.mondiamedia.ahmedbadr.githubreopos;
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule;
-import android.arch.lifecycle.Observer;
-import android.support.test.InstrumentationRegistry;
 
-import com.mondiamedia.ahmedbadr.githubreopos.repository.DataRepository;
-import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -34,34 +25,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class DataRepositoryUnitTest {
 
-    DataRepository mDataRepository;
-
     @Rule
     public InstantTaskExecutorRule instantRule = new InstantTaskExecutorRule();
-
-    @Before
-    public void initiate() {
-//        mDataRepository = DataRepository.getInstance(InstrumentationRegistry.getTargetContext());
-    }
-
-    @Test
-    public void testEmptyDatabase() {
-        Observer<List<GitHubRepository>> corridorObserver = gitHubRepositories -> {
-            assertEquals(gitHubRepositories.size(), 0);
-        };
-
-        mDataRepository.getRepos().observeForever(corridorObserver);
-    }
-
-    @Test
-    public void testSaveReposListOneItem() {
-        List<GitHubRepository> gitHubRepositories = new ArrayList<>();
-        gitHubRepositories.add(new GitHubRepository("url", "author", "name", "avatar", "description"
-                , "language", "languageColor", "stars", "forks"));
-        mDataRepository.saveReposList(gitHubRepositories);
-
-        assertEquals(gitHubRepositories.size(), mDataRepository.getLocalRepos().size());
-    }
 
     @Test
     public void testService() throws IOException {
@@ -92,10 +57,5 @@ public class DataRepositoryUnitTest {
         Response response = okHttpClient.newCall(request).execute();
 
         return response.body().string();
-    }
-
-    @After
-    public void tearDown() {
-        mDataRepository.deleteLocalData();
     }
 }

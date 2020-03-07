@@ -6,7 +6,8 @@ import android.util.Log;
 
 import com.mondiamedia.ahmedbadr.githubreopos.api.RemoteDataSource;
 import com.mondiamedia.ahmedbadr.githubreopos.api.RepositoriesService;
-import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
+import com.mondiamedia.ahmedbadr.githubreopos.local_db.LocalDataSource;
+import com.mondiamedia.ahmedbadr.githubreopos.models.GitRepo;
 
 import java.util.List;
 
@@ -15,23 +16,22 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import io.realm.Realm;
 
 public class DataRepository {
 
     private static final String TAG = DataRepository.class.getSimpleName();
-    private MutableLiveData<List<GitHubRepository>> mRepositoriesList = new MutableLiveData<>();
+    private MutableLiveData<List<GitRepo>> mRepositoriesList = new MutableLiveData<>();
     private RemoteDataSource mRemoteDataSource;
-    private Realm mRealm;
+    private LocalDataSource localDataSource;
 
     @Inject
-    public DataRepository(RemoteDataSource remoteDataSource) {
+    public DataRepository(RemoteDataSource remoteDataSource, LocalDataSource localDataSource) {
         this.mRemoteDataSource = remoteDataSource;
-        mRealm = Realm.getDefaultInstance();
+        this.localDataSource = localDataSource;
     }
 
-    public MutableLiveData<List<GitHubRepository>> getRepos() {
-        List<GitHubRepository> repositoriesRealmList = getLocalRepos();
+    public MutableLiveData<List<GitRepo>> getRepos() {
+        List<GitRepo> repositoriesRealmList = localDataSource.getLocalRepos();
 
         mRepositoriesList.setValue(repositoriesRealmList);
 
@@ -43,15 +43,15 @@ public class DataRepository {
     }
 
     @SuppressLint("CheckResult")
-    public MutableLiveData<List<GitHubRepository>> getRefreshRepos() {
+    public MutableLiveData<List<GitRepo>> getRefreshRepos() {
         RepositoriesService repositoriesService = mRemoteDataSource.createRepositoriesService();
-        Observable<List<GitHubRepository>> call = repositoriesService.getRepositories();
+        Observable<List<GitRepo>> call = repositoriesService.getRepositories();
         call.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(gitHubRepositoryResponse -> {
                     Log.d(TAG, "success");
                     if (gitHubRepositoryResponse != null) {
                         mRepositoriesList.setValue(gitHubRepositoryResponse);
-                        saveReposList(gitHubRepositoryResponse);
+                        localDataSource.saveReposList(gitHubRepositoryResponse);
 
 //                        Job deleteCashJob = mDispatcher.newJobBuilder()
 //                                .setService(DeleteCashService.class)
@@ -67,17 +67,5 @@ public class DataRepository {
                     Log.d(TAG, throwable.getMessage());
                 });
         return mRepositoriesList;
-    }
-
-    public void saveReposList(List<GitHubRepository> gitHubRepositories) {
-        mRealm.executeTransaction(realm -> realm.copyToRealmOrUpdate(gitHubRepositories));
-    }
-
-    public List<GitHubRepository> getLocalRepos() {
-        return mRealm.where(GitHubRepository.class).findAll();
-    }
-
-    public void deleteLocalData() {
-        mRealm.executeTransaction(Realm::deleteAll);
     }
 }

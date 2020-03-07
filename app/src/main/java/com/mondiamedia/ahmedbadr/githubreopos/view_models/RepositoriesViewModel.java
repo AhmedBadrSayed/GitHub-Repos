@@ -4,7 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
+import com.mondiamedia.ahmedbadr.githubreopos.models.GitRepo;
 import com.mondiamedia.ahmedbadr.githubreopos.repository.DataRepository;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import javax.inject.Inject;
 public class RepositoriesViewModel extends ViewModel {
 
     private DataRepository dataRepository;
-    private MutableLiveData<List<GitHubRepository>> mReposList;
+    private MutableLiveData<List<GitRepo>> mReposList;
 
     @Inject
     public RepositoriesViewModel(DataRepository dataRepository) {
@@ -29,11 +29,11 @@ public class RepositoriesViewModel extends ViewModel {
         mReposList = dataRepository.getRepos();
     }
 
-    public LiveData<List<GitHubRepository>> getRepos() {
+    public LiveData<List<GitRepo>> getRepos() {
         return mReposList;
     }
 
-    public LiveData<List<GitHubRepository>> refreshRepos() {
+    public LiveData<List<GitRepo>> refreshRepos() {
         mReposList = dataRepository.getRefreshRepos();
         return mReposList;
     }

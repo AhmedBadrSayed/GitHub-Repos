@@ -3,7 +3,7 @@ package com.mondiamedia.ahmedbadr.githubreopos.models;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class GitHubRepository extends RealmObject {
+public class GitRepo extends RealmObject {
 
     @PrimaryKey
     private String url;
@@ -16,11 +16,11 @@ public class GitHubRepository extends RealmObject {
     private String stars;
     private String forks;
 
-    public GitHubRepository() {
+    public GitRepo() {
     }
 
-    public GitHubRepository(String url, String author, String name, String avatar, String description,
-                            String language, String languageColor, String stars, String forks) {
+    public GitRepo(String url, String author, String name, String avatar, String description,
+                   String language, String languageColor, String stars, String forks) {
         this.url = url;
         this.author = author;
         this.name = name;

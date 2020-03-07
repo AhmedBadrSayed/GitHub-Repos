@@ -14,7 +14,7 @@ import com.mondiamedia.ahmedbadr.githubreopos.Application;
 import com.mondiamedia.ahmedbadr.githubreopos.R;
 import com.mondiamedia.ahmedbadr.githubreopos.databinding.ActivityMainBinding;
 import com.mondiamedia.ahmedbadr.githubreopos.databinding.ContentMainBinding;
-import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
+import com.mondiamedia.ahmedbadr.githubreopos.models.GitRepo;
 import com.mondiamedia.ahmedbadr.githubreopos.view_models.RepositoriesViewModel;
 import com.mondiamedia.ahmedbadr.githubreopos.views.adapters.ReposRecyclerViewAdapter;
 
@@ -30,10 +30,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Inject
     public RepositoriesViewModel mRepositoriesViewModel;
-    private Observer<List<GitHubRepository>> mLiveDataObserver;
+    private Observer<List<GitRepo>> mLiveDataObserver;
 
     private ReposRecyclerViewAdapter mReposRecyclerViewAdapter;
-    private List<GitHubRepository> mReposList = new ArrayList<>();
+    private List<GitRepo> mReposList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
