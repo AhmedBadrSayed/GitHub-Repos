@@ -1,7 +1,7 @@
 package com.mondiamedia.ahmedbadr.githubreopos.repository;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.util.Log;
 
 import com.mondiamedia.ahmedbadr.githubreopos.api.RemoteDataSource;

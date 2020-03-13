@@ -1,8 +1,7 @@
 package com.mondiamedia.ahmedbadr.githubreopos;
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule;
-import android.arch.lifecycle.Observer;
-import android.support.test.InstrumentationRegistry;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.Observer;
 
 import com.mondiamedia.ahmedbadr.githubreopos.repository.DataRepository;
 import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
