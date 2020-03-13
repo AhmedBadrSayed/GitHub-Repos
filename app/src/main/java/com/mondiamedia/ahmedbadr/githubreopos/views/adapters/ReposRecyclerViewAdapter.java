@@ -48,7 +48,8 @@ public class ReposRecyclerViewAdapter extends RecyclerView.Adapter<ReposRecycler
         }
 
         holder.mRepositoriesDataBinding.setGitRepo(gitRepo);
-        Picasso.with(mContext).load(gitRepo.getAvatar()).into(holder.getmRepositoriesDataBinding().authorImage);
+        Picasso.with(mContext).load(gitRepo.getAvatar()).placeholder(R.drawable.placeholder)
+                .into(holder.getmRepositoriesDataBinding().authorImage);
         holder.getmRepositoriesDataBinding().authorImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         holder.getmRepositoriesDataBinding().repoCard.setOnClickListener(v -> {
