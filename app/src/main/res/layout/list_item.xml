@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/repo_card"
+    android:id="@+id/repoCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerHorizontal="true"
@@ -17,7 +17,7 @@
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/author_image"
+            android:id="@+id/authorImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -25,38 +25,38 @@
             tools:src="@drawable/ic_person_black_24dp" />
 
         <TextView
-            android:id="@+id/author_name"
+            android:id="@+id/authorName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:textColor="#52575c"
             android:textSize="7pt"
-            app:layout_constraintStart_toEndOf="@+id/author_image"
+            app:layout_constraintStart_toEndOf="@+id/authorImage"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="TeamNewPipe" />
 
         <TextView
-            android:id="@+id/repo_title"
+            android:id="@+id/repoTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textColor="#52575c"
             android:textSize="8pt"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/author_name"
-            app:layout_constraintTop_toBottomOf="@+id/author_name"
+            app:layout_constraintStart_toStartOf="@+id/authorName"
+            app:layout_constraintTop_toBottomOf="@+id/authorName"
             tools:text="NewPipe" />
 
         <TextView
             android:visibility="gone"
-            android:id="@+id/repo_description"
+            android:id="@+id/repoDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:textColor="#52575c"
             android:textSize="7pt"
-            app:layout_constraintStart_toStartOf="@+id/repo_title"
-            app:layout_constraintTop_toBottomOf="@+id/repo_title"
+            app:layout_constraintStart_toStartOf="@+id/repoTitle"
+            app:layout_constraintTop_toBottomOf="@+id/repoTitle"
             tools:text="A libre lightweight streaming front-end for Android." />
 
         <ImageView
@@ -66,8 +66,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/circle_shape"
-            app:layout_constraintStart_toStartOf="@+id/repo_description"
-            app:layout_constraintTop_toBottomOf="@+id/repo_description" />
+            app:layout_constraintStart_toStartOf="@+id/repoDescription"
+            app:layout_constraintTop_toBottomOf="@+id/repoDescription" />
 
         <TextView
             android:visibility="gone"
@@ -92,11 +92,11 @@
             android:layout_marginTop="16dp"
             android:src="@drawable/star_yellow_16"
             app:layout_constraintStart_toEndOf="@+id/language"
-            app:layout_constraintTop_toBottomOf="@+id/repo_description" />
+            app:layout_constraintTop_toBottomOf="@+id/repoDescription" />
 
         <TextView
             android:visibility="gone"
-            android:id="@+id/stars_count"
+            android:id="@+id/starsCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -116,12 +116,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/fork_black_16"
-            app:layout_constraintStart_toEndOf="@+id/stars_count"
-            app:layout_constraintTop_toBottomOf="@+id/repo_description" />
+            app:layout_constraintStart_toEndOf="@+id/starsCount"
+            app:layout_constraintTop_toBottomOf="@+id/starsCount" />
 
         <TextView
             android:visibility="gone"
-            android:id="@+id/forks_count"
+            android:id="@+id/forksCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

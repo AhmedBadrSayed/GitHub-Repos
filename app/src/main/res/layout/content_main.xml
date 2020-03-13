@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
         <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmer_frame_layout"
+            android:id="@+id/shimmerFrameLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -44,12 +44,12 @@
         </com.facebook.shimmer.ShimmerFrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/repos_recycler_view"
+            android:id="@+id/reposRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/empty_view_layout"
+            android:id="@+id/emptyViewLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="16dp"
@@ -90,7 +90,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/empty_view_label_primary" />
 
             <Button
-                android:id="@+id/empty_view_retry_btn"
+                android:id="@+id/retryBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rectangle_shape"

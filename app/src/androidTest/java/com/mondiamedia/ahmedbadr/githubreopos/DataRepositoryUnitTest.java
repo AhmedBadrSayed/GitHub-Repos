@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
 
 import com.mondiamedia.ahmedbadr.githubreopos.repository.DataRepository;
-import com.mondiamedia.ahmedbadr.githubreopos.models.GitHubRepository;
+import com.mondiamedia.ahmedbadr.githubreopos.models.GitRepo;
 
 import org.junit.After;
 import org.junit.Before;
@@ -45,7 +45,7 @@ public class DataRepositoryUnitTest {
 
     @Test
     public void testEmptyDatabase() {
-        Observer<List<GitHubRepository>> corridorObserver = gitHubRepositories -> {
+        Observer<List<GitRepo>> corridorObserver = gitHubRepositories -> {
             assertEquals(gitHubRepositories.size(), 0);
         };
 
@@ -54,8 +54,8 @@ public class DataRepositoryUnitTest {
 
     @Test
     public void testSaveReposListOneItem() {
-        List<GitHubRepository> gitHubRepositories = new ArrayList<>();
-        gitHubRepositories.add(new GitHubRepository("url", "author", "name", "avatar", "description"
+        List<GitRepo> gitHubRepositories = new ArrayList<>();
+        gitHubRepositories.add(new GitRepo("url", "author", "name", "avatar", "description"
                 , "language", "languageColor", "stars", "forks"));
         mDataRepository.saveReposList(gitHubRepositories);
 
