@@ -8,15 +8,15 @@ import io.realm.Realm
 
 class DeleteCashService : JobService() {
 
-    private lateinit var mRealm: Realm
+    private lateinit var realm: Realm
 
     override fun onCreate() {
         super.onCreate()
-        mRealm = Realm.getDefaultInstance()
+        realm = Realm.getDefaultInstance()
     }
 
     override fun onStartJob(job: JobParameters): Boolean {
-        mRealm.executeTransaction { it.deleteAll() }
+        realm.executeTransaction { it.deleteAll() }
         return false
     }
 

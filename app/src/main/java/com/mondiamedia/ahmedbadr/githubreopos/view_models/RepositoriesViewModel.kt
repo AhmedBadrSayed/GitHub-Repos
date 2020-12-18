@@ -3,29 +3,29 @@ package com.mondiamedia.ahmedbadr.githubreopos.view_models
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-
+import androidx.lifecycle.viewModelScope
 import com.mondiamedia.ahmedbadr.githubreopos.models.GitRepo
 import com.mondiamedia.ahmedbadr.githubreopos.repository.DataRepository
-
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RepositoriesViewModel @Inject
 constructor(private val dataRepository: DataRepository) : ViewModel() {
-    private var mReposList: MutableLiveData<List<GitRepo>>? = null
+    private var _reposList = MutableLiveData<List<GitRepo>>()
+    val reposList: LiveData<List<GitRepo>>?
+        get() = _reposList
 
     fun init() {
-        if (mReposList != null) {
-            return
-        }
+        viewModelScope.launch {
+            reposList?.value.let {
+                if (!it.isNullOrEmpty()) return@launch
+            }
 
-        mReposList = dataRepository.repos
+            _reposList.value = dataRepository.getRepos()
+        }
     }
 
-    val repos: LiveData<List<GitRepo>>?
-        get() = mReposList
-
-    fun refreshRepos(): LiveData<List<GitRepo>>? {
-        mReposList = dataRepository.refreshRepos
-        return mReposList
+    suspend fun refreshRepos() {
+        _reposList.value = dataRepository.getRefreshRepos()
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mondiamedia.ahmedbadr.githubreopos.Application
 import com.mondiamedia.ahmedbadr.githubreopos.R
@@ -12,17 +13,18 @@ import com.mondiamedia.ahmedbadr.githubreopos.view_models.RepositoriesViewModel
 import com.mondiamedia.ahmedbadr.githubreopos.views.adapters.ReposRecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var mRepositoriesViewModel: RepositoriesViewModel
-    private lateinit var mLiveDataObserver: Observer<List<GitRepo>>
+    lateinit var repositoriesViewModel: RepositoriesViewModel
+    private lateinit var liveDataObserver: Observer<List<GitRepo>>
 
-    private lateinit var mReposRecyclerViewAdapter: ReposRecyclerViewAdapter
-    private val mReposList = ArrayList<GitRepo>()
+    private lateinit var reposRecyclerViewAdapter: ReposRecyclerViewAdapter
+    private val reposList = ArrayList<GitRepo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as Application).applicationComponent.inject(this@MainActivity)
@@ -37,14 +39,14 @@ class MainActivity : AppCompatActivity() {
         shimmerFrameLayout.startShimmer()
         setupReposRecyclerView()
 
-        mLiveDataObserver = Observer { listLiveData ->
+        liveDataObserver = Observer { listLiveData ->
             shimmerFrameLayout.stopShimmer()
             shimmerFrameLayout.visibility = View.GONE
             swipeContainer.isRefreshing = false
-            mReposList.clear()
+            reposList.clear()
             if (listLiveData != null) {
-                mReposList.addAll(listLiveData)
-                mReposRecyclerViewAdapter.notifyDataSetChanged()
+                reposList.addAll(listLiveData)
+                reposRecyclerViewAdapter.notifyDataSetChanged()
                 reposRecyclerView.visibility = View.VISIBLE
                 emptyViewLayout.visibility = View.GONE
             } else {
@@ -53,33 +55,40 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        mRepositoriesViewModel.init()
+        repositoriesViewModel.init()
 
-        getAndBindTrendingRepos()
+        observeReposLiveData()
 
         swipeContainer.setOnRefreshListener {
-            shimmerFrameLayout.startShimmer()
-            shimmerFrameLayout.visibility = View.VISIBLE
-            reposRecyclerView.visibility = View.GONE
             refreshedRepos()
         }
 
-        retryBtn.setOnClickListener { refreshedRepos() }
+        retryBtn.setOnClickListener {
+            refreshedRepos()
+        }
     }
 
     private fun setupReposRecyclerView() {
         val layoutManager = LinearLayoutManager(this)
         reposRecyclerView.layoutManager = layoutManager
 
-        mReposRecyclerViewAdapter = ReposRecyclerViewAdapter(mReposList, this)
-        reposRecyclerView.adapter = mReposRecyclerViewAdapter
+        reposRecyclerViewAdapter = ReposRecyclerViewAdapter(reposList, this)
+        reposRecyclerView.adapter = reposRecyclerViewAdapter
     }
 
-    private fun getAndBindTrendingRepos() {
-        mRepositoriesViewModel.repos?.observe(this, mLiveDataObserver)
+    private fun observeReposLiveData() {
+        lifecycleScope.launch {
+            repositoriesViewModel.reposList?.observe(this@MainActivity, liveDataObserver)
+        }
     }
 
     private fun refreshedRepos() {
-        mRepositoriesViewModel.refreshRepos()?.observe(this, mLiveDataObserver)
+        shimmerFrameLayout.startShimmer()
+        shimmerFrameLayout.visibility = View.VISIBLE
+        reposRecyclerView.visibility = View.GONE
+
+        lifecycleScope.launch {
+            repositoriesViewModel.refreshRepos()
+        }
     }
 }

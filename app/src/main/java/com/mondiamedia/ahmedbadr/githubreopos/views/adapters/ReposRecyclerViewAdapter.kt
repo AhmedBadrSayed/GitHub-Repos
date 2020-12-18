@@ -12,14 +12,14 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.list_item.view.*
 import java.util.*
 
-class ReposRecyclerViewAdapter(private val mGitRepoList: List<GitRepo>,
-                               private val mContext: Context
+class ReposRecyclerViewAdapter(private val gitRepoList: List<GitRepo>,
+                               private val context: Context
 ) : RecyclerView.Adapter<ReposRecyclerViewAdapter.ReposViewHolder>() {
 
-    private val mCollapsingStatesList: MutableList<Boolean>
+    private val collapsingStatesList: MutableList<Boolean>
 
     init {
-        this.mCollapsingStatesList = ArrayList(mGitRepoList.size)
+        this.collapsingStatesList = ArrayList(gitRepoList.size)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReposViewHolder {
@@ -28,15 +28,15 @@ class ReposRecyclerViewAdapter(private val mGitRepoList: List<GitRepo>,
     }
 
     override fun onBindViewHolder(holder: ReposViewHolder, position: Int) {
-        val gitHubRepository = mGitRepoList[position]
+        val gitHubRepository = gitRepoList[position]
 
-        mCollapsingStatesList.clear()
-        while (mCollapsingStatesList.size < mGitRepoList.size) {
-            mCollapsingStatesList.add(false)
+        collapsingStatesList.clear()
+        while (collapsingStatesList.size < gitRepoList.size) {
+            collapsingStatesList.add(false)
         }
 
         holder.itemView.apply {
-            Picasso.with(mContext).load(gitHubRepository.avatar).into(authorImage)
+            Picasso.with(context).load(gitHubRepository.avatar).into(authorImage)
             authorImage.scaleType = ImageView.ScaleType.CENTER_CROP
             authorName.text = gitHubRepository.author
             repoTitle.text = gitHubRepository.name
@@ -46,8 +46,8 @@ class ReposRecyclerViewAdapter(private val mGitRepoList: List<GitRepo>,
             forksCount.text = gitHubRepository.forks
 
             repoCard!!.setOnClickListener { v ->
-                updateViews(holder, !mCollapsingStatesList[position])
-                mCollapsingStatesList[position] = !mCollapsingStatesList[position]
+                updateViews(holder, !collapsingStatesList[position])
+                collapsingStatesList[position] = !collapsingStatesList[position]
             }
         }
     }
@@ -63,8 +63,8 @@ class ReposRecyclerViewAdapter(private val mGitRepoList: List<GitRepo>,
     }
 
     override fun getItemCount(): Int {
-        return mGitRepoList.size
+        return gitRepoList.size
     }
 
-    inner class ReposViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class ReposViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }
